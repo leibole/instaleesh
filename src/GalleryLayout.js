@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Divider, AppBar, Chip, FloatingActionButton } from 'material-ui';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import IconButton from 'material-ui/IconButton';
 import { Image } from 'cloudinary-react';
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -48,8 +48,10 @@ class GalleryLayout extends Component {
           iconStyleLeft={{margin: 'auto', display: this.state.singleView ? '' : 'none'}}
           iconElementLeft={
             <IconButton
-              onClick={this.backFromSingle.bind(this)}>
-              <NavigationClose />
+              onClick={this.backFromSingle.bind(this)}
+              style={{width: 30, height: 30}}
+              iconStyle={{ width: 70, height: 70, padding: 14 }}>
+              <NavigationArrowBack />
             </IconButton>
           }
           style={{
