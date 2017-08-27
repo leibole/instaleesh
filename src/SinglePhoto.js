@@ -6,14 +6,16 @@ import { Image, Transformation } from 'cloudinary-react';
 const SinglePhoto = (props) => {
     let columnSizes = {
         lg: props.singleView ? 6 : 3,
-        sm: props.singleView ? 6 : 4,
-        xs: props.singleView ? 6 : 6,
+        xs: props.singleView ? 10 : 4,
         lgOffset: props.singleView ? 3 : 0,
-        xsOffset: props.singleView ? 3 : 0,
-        smOffset: props.singleView ? 3 : 0
+        xsOffset: props.singleView ? 1 : 0
     }
     return (
-        <Col lg={columnSizes.lg} lgOffset={columnSizes.lgOffset} sm={columnSizes.sm} xs={columnSizes.xs}>
+    <Col 
+        lg={columnSizes.lg}
+        xs={columnSizes.xs}
+        xsOffset={columnSizes.xsOffset}
+        lgOffset={columnSizes.lgOffset} >
         <br />
         <Card style={{ height: '100%', cursor: 'pointer' }}>
           <CardMedia>
@@ -28,7 +30,7 @@ const SinglePhoto = (props) => {
           <CardTitle subtitle="Some more information here" />
         </Card>
         <br />
-      </Col>
+    </Col>
     );
 };
 

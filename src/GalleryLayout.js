@@ -45,8 +45,14 @@ class GalleryLayout extends Component {
       <div>
         <AppBar 
           zDepth={4}
-          iconElementLeft={<IconButton onClick={this.backFromSingle.bind(this)}><NavigationClose /></IconButton>}
-          style={{ 
+          iconStyleLeft={{margin: 'auto', display: this.state.singleView ? '' : 'none'}}
+          iconElementLeft={
+            <IconButton
+              onClick={this.backFromSingle.bind(this)}>
+              <NavigationClose />
+            </IconButton>
+          }
+          style={{
             backgroundColor: '#FFFFFF',
             position: 'fixed',
             top: '0px' }} >
