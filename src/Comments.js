@@ -15,7 +15,6 @@ class Comments extends Component {
 
   render() {
     return (
-
       <Row>
         <form onSubmit={this.submitComment.bind(this)} >
           <Col xs={9}>

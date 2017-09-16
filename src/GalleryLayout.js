@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
-import { Divider, AppBar, Chip, FloatingActionButton } from 'material-ui';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import IconButton from 'material-ui/IconButton';
-import { Image } from 'cloudinary-react';
+import { Divider, FloatingActionButton } from 'material-ui';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import cloudinary from 'cloudinary-core';
 import axios from 'axios';
 import PhotoGallery from './PhotoGallery';
 import firebase from './firebase';
-
-
-const styles = {
-  chip: {
-    margin: 4,
-  },
-  wrapper: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-};
+import TopBar from './TopBar';
 
 const uploadButtonStyle = {
   margin: 0,
@@ -39,42 +26,17 @@ class GalleryLayout extends Component {
       images: [],
       singleView: false
     };
+    this.backFromSingle = this.backFromSingle.bind(this);
   }
 
   render() {
     return (
       <div>
-        <AppBar
-          zDepth={4}
-          iconStyleLeft={{ margin: 'auto', display: this.state.singleView ? '' : 'none' }}
-          iconElementLeft={
-            <IconButton
-              onClick={this.backFromSingle.bind(this)}
-              style={{ width: 30, height: 30 }}
-              iconStyle={{ width: 70, height: 70, padding: 14 }}>
-              <NavigationArrowBack />
-            </IconButton>
-          }
-          style={{
-            backgroundColor: '#FFFFFF',
-            position: 'fixed',
-            top: '0px'
-          }} >
-          <Image
-            cloudName={'instaleesh'}
-            publicId={'title_logo_zhnnid'}
-            height={100}
-          />
-        </AppBar>
+        <TopBar backCallback={this.backFromSingle} singleView={this.state.singleView} />
         <div style={{ marginTop: '100px' }}>
           <FloatingActionButton style={uploadButtonStyle} onClick={this.uploadWidget.bind(this)} >
             <ContentAdd />
           </FloatingActionButton>
-          <Chip
-            style={styles.chip}
-          >
-            Text Chip
-          </Chip>
           <Divider />
           <PhotoGallery
             images={this.state.images}
