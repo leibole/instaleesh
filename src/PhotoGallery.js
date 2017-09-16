@@ -16,19 +16,26 @@ class PhotoGallery extends Component {
     return (
       <div>
         <Masonry
-                className={'my-gallery-class'} // default ''
-                elementType={'div'} // default 'div'
-                options={masonryOptions} // default {}
-                onLayoutComplete={this.scrollToCurrentImage.bind(this)}
-                disableImagesLoaded={false} // default false
-                updateOnEachImageLoad={true} // default false and works only if disableImagesLoaded is false
-            >
+          className={'my-gallery-class'}
+          elementType={'div'}
+          options={masonryOptions}
+          onLayoutComplete={this.scrollToCurrentImage.bind(this)}
+          disableImagesLoaded={false}
+          updateOnEachImageLoad={true}
+        >
           {renderPhotos(this.props.images, this.props.singleView, this.imageClicked.bind(this))}
         </Masonry>
       </div>
     )
   }
-//Has to be called here b/c current image needs to be referenced by masonary callback
+
+  componentDidMount() {
+    const imagesRef = firebase.database().ref('images');
+    this.props.images.map(image => {
+      return imagesRef.push({ externalId: image.public_id });
+    });
+  }
+  //Has to be called here b/c current image needs to be referenced by masonary callback
   imageClicked(element) {
     this.props.onImageClick();
     this.setState({ currentImage: element })

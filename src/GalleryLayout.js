@@ -7,6 +7,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import cloudinary from 'cloudinary-core';
 import axios from 'axios';
 import PhotoGallery from './PhotoGallery';
+import firebase from './firebase';
 
 
 const styles = {
@@ -88,13 +89,19 @@ class GalleryLayout extends Component {
     var cl = new cloudinary.Cloudinary({ cloud_name: "instaleesh", secure: true });
     var all_images = cl.imageTag('test.json', { type: "list" });
     axios.get(all_images.attributes().src)
-      .then(response => this.setState({ images: response.data.resources }));
+      .then(response => {
+        this.setState({ images: response.data.resources });
+        const imagesRef = firebase.database().ref('images');
+        response.data.resources.map(image => {
+          return imagesRef.push({ externalId: image.public_id });
+        });
+      });
   }
 
   backFromSingle() {
     this.setState({ singleView: false });
   }
-  
+
   changeToSingleView() {
     this.setState({ singleView: true });
   }
