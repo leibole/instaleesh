@@ -4,7 +4,7 @@ import SinglePhoto from './SinglePhoto';
 import firebase from './firebase';
 
 const masonryOptions = {
-  transitionDuration: 4
+  transitionDuration: 0
 };
 
 class PhotoGallery extends Component {
@@ -12,12 +12,14 @@ class PhotoGallery extends Component {
     super(props);
     this.state = { currentImage: null }
   }
+
   render() {
     return (
       <div>
         <Masonry
           className={'my-gallery-class'}
           elementType={'div'}
+          enableResizableChildren={true}
           options={masonryOptions}
           onLayoutComplete={this.scrollToCurrentImage.bind(this)}
           disableImagesLoaded={false}
@@ -42,8 +44,8 @@ class PhotoGallery extends Component {
   }
 
   scrollToCurrentImage() {
-    if (this.state.currentImage)
-      this.state.currentImage.scrollIntoView();
+    // if (this.state.currentImage)
+    //   this.state.currentImage.scrollIntoView();
   }
 }
 

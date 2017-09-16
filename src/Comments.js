@@ -49,11 +49,8 @@ class Comments extends Component {
 
   submitComment(event) {
     event.preventDefault();
-    console.log();
     const commentsRef = firebase.database().ref('comments');
-    let comment = this.state.comment;
-    let imageId = this.props.imageId;
-    commentsRef.push({ comment: comment, imageId: imageId })
+    commentsRef.push({ comment: this.state.comment, imageId: this.props.imageId })
   }
 }
 
