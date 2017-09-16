@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { Card, CardMedia, CardTitle } from 'material-ui/Card';
-import { Image, Transformation } from 'cloudinary-react';
-import reactDOM from 'react-dom';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import ContentSend from 'material-ui/svg-icons/content/send';
