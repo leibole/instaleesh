@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Masonry from 'react-masonry-component';
 import SinglePhoto from './SinglePhoto';
+import firebase from './firebase';
 
 const masonryOptions = {
-  transitionDuration: 4 
+  transitionDuration: 4
 };
 
 class PhotoGallery extends Component {
@@ -39,15 +40,15 @@ class PhotoGallery extends Component {
   }
 }
 
-  function renderPhotos(images, singleView, onImageClick) {
-    return images.map(image => (
-      <SinglePhoto 
-        image={image}
-        key={image.public_id}
-        singleView={singleView} 
-        onImageClick={onImageClick} />
-    ));
-  }
+function renderPhotos(images, singleView, onImageClick) {
+  return images.map(image => (
+    <SinglePhoto
+      image={image}
+      key={image.public_id}
+      singleView={singleView}
+      onImageClick={onImageClick} />
+  ));
+}
 
 
 export default PhotoGallery;

@@ -26,7 +26,7 @@ const uploadButtonStyle = {
   bottom: 20,
   left: 'auto',
   position: 'fixed',
-  zIndex: 1
+  zIndex: 2
 };
 
 const ccc = window.cloudinary;
@@ -34,7 +34,7 @@ const ccc = window.cloudinary;
 class GalleryLayout extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       images: [],
       singleView: false
     };
@@ -43,13 +43,13 @@ class GalleryLayout extends Component {
   render() {
     return (
       <div>
-        <AppBar 
+        <AppBar
           zDepth={4}
-          iconStyleLeft={{margin: 'auto', display: this.state.singleView ? '' : 'none'}}
+          iconStyleLeft={{ margin: 'auto', display: this.state.singleView ? '' : 'none' }}
           iconElementLeft={
             <IconButton
               onClick={this.backFromSingle.bind(this)}
-              style={{width: 30, height: 30}}
+              style={{ width: 30, height: 30 }}
               iconStyle={{ width: 70, height: 70, padding: 14 }}>
               <NavigationArrowBack />
             </IconButton>
@@ -57,14 +57,15 @@ class GalleryLayout extends Component {
           style={{
             backgroundColor: '#FFFFFF',
             position: 'fixed',
-            top: '0px' }} >
-          <Image 
-            cloudName={'instaleesh'} 
-            publicId={'title_logo_zhnnid'} 
+            top: '0px'
+          }} >
+          <Image
+            cloudName={'instaleesh'}
+            publicId={'title_logo_zhnnid'}
             height={100}
-            />
+          />
         </AppBar>
-        <div style={{marginTop: '100px'}}>
+        <div style={{ marginTop: '100px' }}>
           <FloatingActionButton style={uploadButtonStyle} onClick={this.uploadWidget.bind(this)} >
             <ContentAdd />
           </FloatingActionButton>
@@ -74,8 +75,8 @@ class GalleryLayout extends Component {
             Text Chip
           </Chip>
           <Divider />
-          <PhotoGallery 
-            images={this.state.images} 
+          <PhotoGallery
+            images={this.state.images}
             singleView={this.state.singleView}
             onImageClick={this.changeToSingleView.bind(this)} />
         </div>
