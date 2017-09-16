@@ -4,8 +4,16 @@ import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { Image, Transformation } from 'cloudinary-react';
 import reactDOM from 'react-dom';
 import Comments from './Comments';
+import Paper from 'material-ui/Paper';
 
 class SinglePhoto extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageComments: ['comment1', 'comment2']
+    };
+  }
+
   render() {
     return (
       <Col
@@ -29,10 +37,21 @@ class SinglePhoto extends Component {
           <CardTitle>
             <Comments imageId={this.props.image.public_id} />
           </CardTitle>
+          <CardText>
+            {this.state.imageComments.map(comment => (
+              <Paper style={{ margin: '5px'}} zDepth={5} >
+                comment
+              </Paper>
+            ))}
+          </CardText>
         </Card>
         <br />
       </Col>
     );
+  }
+
+  componentDidMount() {
+    
   }
 
   imageClicked() {

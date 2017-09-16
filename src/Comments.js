@@ -15,6 +15,7 @@ class Comments extends Component {
 
   render() {
     return (
+
       <Row>
         <form onSubmit={this.submitComment.bind(this)} >
           <Col xs={9}>
@@ -22,6 +23,7 @@ class Comments extends Component {
               hintText="Comment on this image"
               multiLine={true}
               rowsMax={3}
+              value={this.state.comment}
               onChange={this.handleChange.bind(this)}
             />
           </Col>
@@ -48,6 +50,7 @@ class Comments extends Component {
     event.preventDefault();
     const commentsRef = firebase.database().ref('comments');
     commentsRef.push({ comment: this.state.comment, imageId: this.props.imageId })
+    this.setState({ comment: '' })
   }
 }
 
