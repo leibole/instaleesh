@@ -5,12 +5,13 @@ import { Image, Transformation } from 'cloudinary-react';
 import reactDOM from 'react-dom';
 import Comments from './Comments';
 import Paper from 'material-ui/Paper';
+import firebase from './firebase';
 
 class SinglePhoto extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageComments: ['comment1', 'comment2']
+      imageComments: []
     };
   }
 
@@ -39,8 +40,8 @@ class SinglePhoto extends Component {
           </CardTitle>
           <CardText>
             {this.state.imageComments.map(comment => (
-              <Paper style={{ margin: '5px'}} zDepth={5} >
-                comment
+              <Paper key={comment.id} style={{ margin: '5px', padding: '5px' }} zDepth={5} >
+                {comment.content}
               </Paper>
             ))}
           </CardText>
@@ -51,7 +52,15 @@ class SinglePhoto extends Component {
   }
 
   componentDidMount() {
-    
+    const commentsRef = firebase.database().ref('comments');
+    commentsRef
+      .orderByChild("imageId")
+      .equalTo(this.props.image.public_id)
+      .on('child_added', (function (snapshot) {
+        let newComments = this.state.imageComments;
+        newComments.push({ id: snapshot.key, content: snapshot.child('comment').val() });
+        this.setState({ imageComments: newComments });
+      }).bind(this));
   }
 
   imageClicked() {
