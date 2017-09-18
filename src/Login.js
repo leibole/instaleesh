@@ -40,6 +40,14 @@ class Login extends Component {
     )
   }
 
+  componentWillMount() {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.props.setUser(user);
+      }
+    });
+  }
+
   login() {
     auth.signInWithPopup(provider)
       .then((result) => {
