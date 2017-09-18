@@ -8,6 +8,7 @@ import Paper from 'material-ui/Paper';
 import firebase from './firebase';
 import Avatar from 'material-ui/Avatar';
 import ReactTooltip from 'react-tooltip';
+import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 
 class SinglePhoto extends Component {
   constructor(props) {
@@ -37,23 +38,30 @@ class SinglePhoto extends Component {
               <Transformation quality="60" />
             </Image>
           </CardMedia>
-          <CardTitle>
-            <Comments imageId={this.props.image.public_id} user={this.props.user} />
-          </CardTitle>
-          <CardText>
-            {this.state.imageComments.map(comment => (
-              <Paper key={comment.id} style={{ margin: '5px', padding: '5px' }} zDepth={5} >
-                <Avatar
-                  data-tip={comment.userData ? comment.userData.displayName : ''}
-                  src={comment.userData ? comment.userData.photoURL : ''}
-                  size={25}
-                  style={{ margin: '5px' }}
-                />
-                <ReactTooltip data-effect="float" />
-                {comment.content}
-              </Paper>
-            ))}
-          </CardText>
+          <Col xsHidden={!this.props.singleView}>
+            <CardTitle>
+              <Comments imageId={this.props.image.public_id} user={this.props.user} />
+            </CardTitle>
+            <CardText>
+              {this.state.imageComments.map(comment => (
+                <Paper key={comment.id} style={{ margin: '5px', padding: '5px' }} zDepth={5} >
+                  <Avatar
+                    data-tip={comment.userData ? comment.userData.displayName : ''}
+                    src={comment.userData ? comment.userData.photoURL : ''}
+                    size={25}
+                    style={{ margin: '5px' }}
+                  />
+                  <ReactTooltip data-effect="float" />
+                  {comment.content}
+                </Paper>
+              ))}
+            </CardText>
+          </Col>
+          <Col mdHidden={this.props.singleView} lgHidden={this.props.singleView}>
+            <CardTitle>
+              {this.state.imageComments.length} <CommunicationChatBubble />
+            </CardTitle>
+          </Col>
         </Card>
         <br />
       </Col>
