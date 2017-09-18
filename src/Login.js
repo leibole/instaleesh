@@ -6,6 +6,7 @@ import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import Paper from 'material-ui/Paper';
+import { Col } from 'react-bootstrap';
 
 class Login extends Component {
   constructor(props) {
@@ -24,14 +25,16 @@ class Login extends Component {
         <button onClick={this.login}>Log in</button>
         <List style={{ marginTop: '60px' }}>
           <Subheader>Sign in with one of these</Subheader>
-          <Paper style={{ margin: '10px' }}>
-            <ListItem
-              primaryText="Sign in with Google"
-              leftAvatar={<Avatar src="images/google_logo.jpg" />}
-              rightIcon={<CommunicationChatBubble />}
-              onClick={this.login}
-            />
-          </Paper>
+          <Col md={6} mdOffset={3}>
+            <Paper style={{ margin: '10px' }}>
+              <ListItem
+                primaryText="Sign in with Google"
+                leftAvatar={<Avatar src="images/google_logo.jpg" />}
+                rightIcon={<CommunicationChatBubble />}
+                onClick={this.login}
+              />
+            </Paper>
+          </Col>
         </List>
       </div>
     )
