@@ -11,6 +11,7 @@ class PhotoGallery extends Component {
   constructor(props) {
     super(props);
     this.state = { currentImage: null }
+    this.renderPhotos = this.renderPhotos.bind(this);
   }
 
   render() {
@@ -25,7 +26,7 @@ class PhotoGallery extends Component {
           disableImagesLoaded={false}
           updateOnEachImageLoad={true}
         >
-          {renderPhotos(this.props.images, this.props.singleView, this.imageClicked.bind(this))}
+          {this.renderPhotos(this.props.images, this.props.singleView, this.imageClicked.bind(this))}
         </Masonry>
       </div>
     )
@@ -47,17 +48,17 @@ class PhotoGallery extends Component {
     // if (this.state.currentImage)
     //   this.state.currentImage.scrollIntoView();
   }
+  
+  renderPhotos(images, singleView, onImageClick) {
+    return images.map(image => (
+      <SinglePhoto
+        image={image}
+        key={image.public_id}
+        singleView={singleView}
+        onImageClick={onImageClick}
+        user={this.props.user} />
+    ), this);
+  }
 }
-
-function renderPhotos(images, singleView, onImageClick) {
-  return images.map(image => (
-    <SinglePhoto
-      image={image}
-      key={image.public_id}
-      singleView={singleView}
-      onImageClick={onImageClick} />
-  ));
-}
-
 
 export default PhotoGallery;

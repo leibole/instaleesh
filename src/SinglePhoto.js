@@ -6,6 +6,8 @@ import reactDOM from 'react-dom';
 import Comments from './Comments';
 import Paper from 'material-ui/Paper';
 import firebase from './firebase';
+import Avatar from 'material-ui/Avatar';
+import ReactTooltip from 'react-tooltip';
 
 class SinglePhoto extends Component {
   constructor(props) {
@@ -36,11 +38,18 @@ class SinglePhoto extends Component {
             </Image>
           </CardMedia>
           <CardTitle>
-            <Comments imageId={this.props.image.public_id} />
+            <Comments imageId={this.props.image.public_id} user={this.props.user} />
           </CardTitle>
           <CardText>
             {this.state.imageComments.map(comment => (
               <Paper key={comment.id} style={{ margin: '5px', padding: '5px' }} zDepth={5} >
+                <Avatar
+                  data-tip={comment.userData ? comment.userData.displayName : ''}
+                  src={comment.userData ? comment.userData.photoURL : ''}
+                  size={25}
+                  style={{ margin: '5px' }}
+                />
+                <ReactTooltip data-effect="float" />
                 {comment.content}
               </Paper>
             ))}
@@ -58,7 +67,11 @@ class SinglePhoto extends Component {
       .equalTo(this.props.image.public_id)
       .on('child_added', (function (snapshot) {
         let newComments = this.state.imageComments;
-        newComments.push({ id: snapshot.key, content: snapshot.child('comment').val() });
+        newComments.push({
+          id: snapshot.key,
+          content: snapshot.child('comment').val(),
+          userData: snapshot.child('userData').val()
+        });
         this.setState({ imageComments: newComments });
       }).bind(this));
   }

@@ -40,7 +40,8 @@ class GalleryLayout extends Component {
           <PhotoGallery
             images={this.state.images}
             singleView={this.state.singleView}
-            onImageClick={this.changeToSingleView.bind(this)} />
+            onImageClick={this.changeToSingleView.bind(this)}
+            user={this.props.user} />
         </div>
       </div>
     )
