@@ -4,7 +4,6 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import cloudinary from 'cloudinary-core';
 import axios from 'axios';
 import PhotoGallery from './PhotoGallery';
-import firebase from './firebase';
 import TopBar from './TopBar';
 
 const uploadButtonStyle = {
@@ -53,10 +52,6 @@ class GalleryLayout extends Component {
     axios.get(all_images.attributes().src)
       .then(response => {
         this.setState({ images: response.data.resources });
-        const imagesRef = firebase.database().ref('images');
-        response.data.resources.map(image => {
-          return imagesRef.push({ externalId: image.public_id });
-        });
       });
   }
 
