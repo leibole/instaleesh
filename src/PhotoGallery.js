@@ -45,8 +45,10 @@ class PhotoGallery extends Component {
   }
 
   scrollToCurrentImage() {
-    // if (this.state.currentImage)
-    //   this.state.currentImage.scrollIntoView();
+    if (this.state.currentImage) {
+      this.state.currentImage.scrollIntoView()
+      this.setState({ currentImage: null })
+    }
   }
   
   renderPhotos(images, singleView, onImageClick) {
