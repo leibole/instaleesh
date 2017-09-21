@@ -5,6 +5,7 @@ import cloudinary from 'cloudinary-core';
 import axios from 'axios';
 import PhotoGallery from './PhotoGallery';
 import TopBar from './TopBar';
+import Headroom from 'react-headroom';
 
 const uploadButtonStyle = {
   margin: 0,
@@ -31,8 +32,10 @@ class GalleryLayout extends Component {
   render() {
     return (
       <div>
-        <TopBar backCallback={this.backFromSingle} singleView={this.state.singleView} />
-        <div style={{ marginTop: '100px' }}>
+        <Headroom>
+          <TopBar backCallback={this.backFromSingle} singleView={this.state.singleView} />
+        </Headroom>
+        <div>
           <FloatingActionButton style={uploadButtonStyle} onClick={this.uploadWidget.bind(this)} >
             <ContentAdd />
           </FloatingActionButton>

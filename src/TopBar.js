@@ -27,9 +27,7 @@ class TopBar extends Component {
           </IconButton>
         }
         style={{
-          backgroundColor: '#FFFFFF',
-          position: 'fixed',
-          top: '0px'
+          backgroundColor: '#FFFFFF'
         }} >
         <Image
           cloudName={'instaleesh'}
