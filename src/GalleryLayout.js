@@ -6,6 +6,9 @@ import axios from 'axios';
 import PhotoGallery from './PhotoGallery';
 import TopBar from './TopBar';
 import Headroom from 'react-headroom';
+import ActionExitToApp from 'material-ui/svg-icons/action/exit-to-app';
+import IconButton from 'material-ui/IconButton';
+import ReactTooltip from 'react-tooltip';
 
 const uploadButtonStyle = {
   margin: 0,
@@ -46,6 +49,14 @@ class GalleryLayout extends Component {
             onImageClick={this.changeToSingleView.bind(this)}
             user={this.props.user} />
         </div>
+        <IconButton
+          onClick={this.props.logoutCallback}
+          style={{ width: 70, height: 70 }}
+          iconStyle={{ width: 70, height: 70, padding: 14, color: 'black' }}>
+          <ActionExitToApp data-tip="Logout" />
+          <ReactTooltip data-effect="float" />
+        </IconButton>
+
       </div>
     )
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { auth, provider } from './firebase.js';
+import { auth, googleProvider, facebookProvider } from './firebase.js';
 import TopBar from './TopBar';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
@@ -15,7 +15,8 @@ class Login extends Component {
       images: [],
       singleView: false
     };
-    this.login = this.login.bind(this);
+    this.googleLogin = this.googleLogin.bind(this);
+    this.facebookLogin = this.facebookLogin.bind(this);
   }
 
   render() {
@@ -27,10 +28,20 @@ class Login extends Component {
           <Col md={6} mdOffset={3}>
             <Paper style={{ margin: '10px' }}>
               <ListItem
+                primaryText="Sign in with Facebook"
+                leftAvatar={<Avatar src="images/facebook-login.png" />}
+                rightIcon={<CommunicationChatBubble />}
+                onClick={this.facebookLogin}
+              />
+            </Paper>
+          </Col>
+          <Col md={6} mdOffset={3}>
+            <Paper style={{ margin: '10px' }}>
+              <ListItem
                 primaryText="Sign in with Google"
                 leftAvatar={<Avatar src="images/google_logo.jpg" />}
                 rightIcon={<CommunicationChatBubble />}
-                onClick={this.login}
+                onClick={this.googleLogin}
               />
             </Paper>
           </Col>
@@ -47,13 +58,20 @@ class Login extends Component {
     });
   }
 
-  login() {
+  googleLogin() {
+    this.login(googleProvider);
+  }
+
+  facebookLogin() {
+    this.login(facebookProvider);
+  }
+
+  login(provider) {
     auth.signInWithPopup(provider)
       .then((result) => {
         const user = result.user;
         this.props.setUser(user);
       });
-
   }
 }
 

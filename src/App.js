@@ -5,6 +5,7 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import GalleryLayout from './GalleryLayout';
 import Login from './Login';
+import { auth } from './firebase';
 
 class App extends Component {
   constructor() {
@@ -13,13 +14,14 @@ class App extends Component {
       user: null
     }
     this.setUser = this.setUser.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
   }
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
         {
           this.state.user ? 
-            <GalleryLayout user={this.state.user}/>
+            <GalleryLayout user={this.state.user} logoutCallback={this.logoutUser} />
           :
             <Login setUser={this.setUser} />
         }
@@ -29,6 +31,15 @@ class App extends Component {
 
   setUser(user) {
     this.setState({ user: user });
+  }
+
+  logoutUser() {
+    auth.signOut()
+    .then(() => {
+      this.setState({
+        user: null
+      });
+    });
   }
 }
 
