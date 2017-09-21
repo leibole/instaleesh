@@ -8,6 +8,7 @@ import firebase from './firebase';
 import Avatar from 'material-ui/Avatar';
 import ReactTooltip from 'react-tooltip';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
+import './SinglePhoto.css';
 
 class SinglePhoto extends Component {
   constructor(props) {
@@ -23,8 +24,8 @@ class SinglePhoto extends Component {
         lg={this.props.singleView ? 6 : 3}
         lgOffset={this.props.singleView ? 3 : 0}
         xs={this.props.singleView ? 10 : 4}
-        xsOffset={this.props.singleView ? 1 : 0} >
-        <br />
+        xsOffset={this.props.singleView ? 1 : 0}
+        className="mobile-padding" >
         <Card
           ref={(cardRef) => { this.cardRef = cardRef }}>
           <CardMedia
@@ -40,7 +41,7 @@ class SinglePhoto extends Component {
             <CardTitle>
               <Comments imageId={this.props.image.public_id} user={this.props.user} />
             </CardTitle>
-            <CardText>
+            <CardText style={{ paddingTop: '0px' }}>
               {this.state.imageComments.map(comment => (
                 <Paper key={comment.id} style={{ margin: '5px', padding: '5px' }} zDepth={5} >
                   <Avatar
@@ -55,14 +56,15 @@ class SinglePhoto extends Component {
               ))}
             </CardText>
           </Col>
-          <Col mdHidden={this.props.singleView} lgHidden={this.props.singleView}>
-            <CardTitle>
-              <CommunicationChatBubble />
-              {this.state.imageComments.length}
+          <Col xsHidden={this.props.singleView} mdHidden={true} lgHidden={true} >
+            <CardTitle style={{ padding: '5px' }}>
+              <CommunicationChatBubble style={{ height: '20px', width: '20px' }} />
+              <span style={{ marginLeft: '5px', verticalAlign: 'top' }}>
+                {this.state.imageComments.length}
+              </span>
             </CardTitle>
           </Col>
         </Card>
-        <br />
       </Col>
     );
   }
