@@ -24,6 +24,7 @@ class Comments extends Component {
               rowsMax={3}
               value={this.state.comment}
               onChange={this.handleChange.bind(this)}
+              style={{ width: '100%' }}
             />
           </Col>
           <Col xs={3}>
