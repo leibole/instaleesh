@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import { Image, Transformation } from 'cloudinary-react';
 import reactDOM from 'react-dom';
 import Comments from './Comments';
 import Paper from 'material-ui/Paper';
@@ -30,13 +29,12 @@ class SinglePhoto extends Component {
           ref={(cardRef) => { this.cardRef = cardRef }}>
           <CardMedia
             style={{ cursor: this.props.singleView ? '' : 'pointer' }} >
-            <Image
-              cloudName="instaleesh"
-              publicId={this.props.image.public_id}
+            <img
+              src={"//res.cloudinary.com/instaleesh/image/upload/q_60/" + this.props.image.public_id}
+              alt="Great furniture"
               onClick={this.imageClicked.bind(this)}
             >
-              <Transformation quality="60" />
-            </Image>
+            </img>
           </CardMedia>
           <Col xsHidden={!this.props.singleView}>
             <CardTitle>
@@ -59,7 +57,8 @@ class SinglePhoto extends Component {
           </Col>
           <Col mdHidden={this.props.singleView} lgHidden={this.props.singleView}>
             <CardTitle>
-              {this.state.imageComments.length} <CommunicationChatBubble />
+              <CommunicationChatBubble />
+              {this.state.imageComments.length}
             </CardTitle>
           </Col>
         </Card>
