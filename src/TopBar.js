@@ -21,7 +21,7 @@ class TopBar extends Component {
         iconElementLeft={
           <IconButton
             onClick={this.props.backCallback}
-            style={{ width: 30, height: 30 }}
+            style={{ width: 70, height: 70 }}
             iconStyle={{ width: 70, height: 70, padding: 14 }}>
             <NavigationArrowBack />
           </IconButton>
