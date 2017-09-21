@@ -22,7 +22,6 @@ class Login extends Component {
     return (
       <div>
         <TopBar />
-        <button onClick={this.login}>Log in</button>
         <List style={{ marginTop: '60px' }}>
           <Subheader>Sign in with one of these</Subheader>
           <Col md={6} mdOffset={3}>
