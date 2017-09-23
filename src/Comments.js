@@ -7,7 +7,7 @@ import firebase from './firebase';
 import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
 import ReactTooltip from 'react-tooltip';
-import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { CardText } from 'material-ui/Card';
 
 class CommentInput extends Component {
   constructor(props) {
@@ -107,6 +107,7 @@ class SinglePhotoComments extends Component {
           userData: snapshot.child('userData').val()
         });
         this.setState({ photoComments: newComments });
+        this.props.imageAddCallback(newComments.length);
       }).bind(this));
   }
 }

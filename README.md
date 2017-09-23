@@ -1,6 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-
-Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
-
 This project displays images for designers to present to their customers.
+
+You can upload photos, and comment on each photo.
+
+Users can sign in with Google or facebook, and each user can see only his board.

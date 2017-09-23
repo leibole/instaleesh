@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
-import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardMedia, CardTitle } from 'material-ui/Card';
 import reactDOM from 'react-dom';
 import { CommentInput, SinglePhotoComments } from './Comments';
-import firebase from './firebase';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import './SinglePhoto.css';
 
@@ -11,8 +10,10 @@ class SinglePhoto extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageComments: []
+      numberOfImages: 0
     };
+
+    this.updateNumberOfImages = this.updateNumberOfImages.bind(this);
   }
 
   render() {
@@ -38,19 +39,25 @@ class SinglePhoto extends Component {
             <CardTitle>
               <CommentInput imageId={this.props.image.public_id} user={this.props.user} />
             </CardTitle>
-            <SinglePhotoComments imageId={this.props.image.public_id}/>
+            <SinglePhotoComments
+              imageId={this.props.image.public_id}
+              imageAddCallback={this.updateNumberOfImages} />
           </Col>
           <Col xsHidden={this.props.singleView} mdHidden={true} lgHidden={true} >
             <CardTitle style={{ padding: '5px' }}>
               <CommunicationChatBubble style={{ height: '20px', width: '20px' }} />
               <span style={{ marginLeft: '5px', verticalAlign: 'top' }}>
-                {this.state.imageComments.length}
+                {this.state.numberOfImages}
               </span>
             </CardTitle>
           </Col>
         </Card>
       </Col>
     );
+  }
+
+  updateNumberOfImages(numberOfImages) {
+    this.setState({ numberOfImages: numberOfImages });
   }
 
   imageClicked() {
