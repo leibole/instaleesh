@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import reactDOM from 'react-dom';
-import Comments from './Comments';
-import Paper from 'material-ui/Paper';
+import { CommentInput, SinglePhotoComments } from './Comments';
 import firebase from './firebase';
-import Avatar from 'material-ui/Avatar';
-import ReactTooltip from 'react-tooltip';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import './SinglePhoto.css';
 
@@ -39,22 +36,9 @@ class SinglePhoto extends Component {
           </CardMedia>
           <Col xsHidden={!this.props.singleView}>
             <CardTitle>
-              <Comments imageId={this.props.image.public_id} user={this.props.user} />
+              <CommentInput imageId={this.props.image.public_id} user={this.props.user} />
             </CardTitle>
-            <CardText style={{ paddingTop: '0px' }}>
-              {this.state.imageComments.map(comment => (
-                <Paper key={comment.id} style={{ margin: '5px', padding: '5px' }} zDepth={5} >
-                  <Avatar
-                    data-tip={comment.userData ? comment.userData.displayName : ''}
-                    src={comment.userData ? comment.userData.photoURL : ''}
-                    size={25}
-                    style={{ margin: '5px' }}
-                  />
-                  <ReactTooltip data-effect="float" />
-                  {comment.content}
-                </Paper>
-              ))}
-            </CardText>
+            <SinglePhotoComments imageId={this.props.image.public_id}/>
           </Col>
           <Col xsHidden={this.props.singleView} mdHidden={true} lgHidden={true} >
             <CardTitle style={{ padding: '5px' }}>
@@ -67,22 +51,6 @@ class SinglePhoto extends Component {
         </Card>
       </Col>
     );
-  }
-
-  componentDidMount() {
-    const commentsRef = firebase.database().ref('comments');
-    commentsRef
-      .orderByChild("imageId")
-      .equalTo(this.props.image.public_id)
-      .on('child_added', (function (snapshot) {
-        let newComments = this.state.imageComments;
-        newComments.push({
-          id: snapshot.key,
-          content: snapshot.child('comment').val(),
-          userData: snapshot.child('userData').val()
-        });
-        this.setState({ imageComments: newComments });
-      }).bind(this));
   }
 
   imageClicked() {

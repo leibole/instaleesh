@@ -4,8 +4,12 @@ import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import ContentSend from 'material-ui/svg-icons/content/send';
 import firebase from './firebase';
+import Paper from 'material-ui/Paper';
+import Avatar from 'material-ui/Avatar';
+import ReactTooltip from 'react-tooltip';
+import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 
-class Comments extends Component {
+class CommentInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,4 +63,53 @@ class Comments extends Component {
   }
 }
 
-export default Comments;
+class SinglePhotoComments extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      photoComments: []
+    };
+  }
+  
+  render() {
+    return (
+      <CardText style={{ paddingTop: '0px' }}>
+      {this.state.photoComments.map(comment => (
+        <Paper key={comment.id} style={{ margin: '5px', padding: '5px' }} zDepth={5} >
+          <Avatar
+            data-tip={comment.userData ? comment.userData.displayName : ''}
+            src={comment.userData ? comment.userData.photoURL : ''}
+            size={25}
+            style={{ margin: '5px' }}
+          />
+          <ReactTooltip data-effect="float" />
+          {comment.content}
+        </Paper>
+      ))}
+    </CardText>
+    )
+  }
+
+  componentDidMount() {
+    this.loadComments.call(this);
+  }
+
+  loadComments() {
+    const commentsRef = firebase.database().ref('comments');
+    commentsRef
+      .orderByChild("imageId")
+      .equalTo(this.props.imageId)
+      .on('child_added', (function (snapshot) {
+        let newComments = this.state.photoComments;
+        newComments.push({
+          id: snapshot.key,
+          content: snapshot.child('comment').val(),
+          userData: snapshot.child('userData').val()
+        });
+        this.setState({ photoComments: newComments });
+      }).bind(this));
+  }
+}
+
+
+export { SinglePhotoComments, CommentInput };
