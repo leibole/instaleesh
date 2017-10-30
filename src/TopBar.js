@@ -31,7 +31,7 @@ class TopBar extends Component {
         }} >
         <Image
           cloudName={'instaleesh'}
-          publicId={'title_logo_zhnnid'}
+          publicId={'title_logo_mchxjq'}
           height={100}
         />
       </AppBar>
