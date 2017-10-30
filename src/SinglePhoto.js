@@ -4,6 +4,7 @@ import { Card, CardMedia, CardTitle } from 'material-ui/Card';
 import reactDOM from 'react-dom';
 import { CommentInput, SinglePhotoComments } from './Comments';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
+import FileDownload from 'material-ui/svg-icons/file/file-download';
 import './SinglePhoto.css';
 
 class SinglePhoto extends Component {
@@ -28,8 +29,20 @@ class SinglePhoto extends Component {
           ref={(cardRef) => { this.cardRef = cardRef }}>
           <CardMedia
             style={{ cursor: this.props.singleView ? '' : 'pointer' }} >
+            <a href={"//res.cloudinary.com/instaleesh/image/upload/" + this.props.image.public_id} download>
+            <FileDownload 
+            style={{ 
+              height: '30px',
+              width: '30px',
+              position: 'absolute',
+              top: 0, 
+              right: 0,
+              color: 'black',
+              opacity: 0.5
+            }} />
+            </a>
             <img
-              src={"//res.cloudinary.com/instaleesh/image/upload/q_60/" + this.props.image.public_id}
+              src={"//res.cloudinary.com/instaleesh/image/upload/q_60/" + this.props.image.public_id + ".jpg"}
               alt="Great furniture"
               onClick={this.imageClicked.bind(this)}
             >
