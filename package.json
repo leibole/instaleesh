@@ -16,6 +16,7 @@
     "react-dom": "^15.6.1",
     "react-headroom": "^2.1.6",
     "react-masonry-component": "^5.0.7",
+    "react-query-params": "^1.0.7",
     "react-tooltip": "^3.3.0"
   },
   "scripts": {

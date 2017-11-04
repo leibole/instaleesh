@@ -9,6 +9,7 @@ import Headroom from 'react-headroom';
 import ActionExitToApp from 'material-ui/svg-icons/action/exit-to-app';
 import IconButton from 'material-ui/IconButton';
 import ReactTooltip from 'react-tooltip';
+import ReactQueryParams from 'react-query-params';
 
 const uploadButtonStyle = {
   margin: 0,
@@ -22,12 +23,13 @@ const uploadButtonStyle = {
 
 const ccc = window.cloudinary;
 
-class GalleryLayout extends Component {
+class GalleryLayout extends ReactQueryParams {
   constructor(props) {
     super(props);
     this.state = {
       images: [],
-      singleView: false
+      singleView: false,
+      userImagesTag: this.queryParams.name ? this.queryParams.name : 'test'
     };
     this.backFromSingle = this.backFromSingle.bind(this);
   }
@@ -63,7 +65,7 @@ class GalleryLayout extends Component {
 
   componentDidMount() {
     var cl = new cloudinary.Cloudinary({ cloud_name: "instaleesh", secure: true });
-    var all_images = cl.imageTag('test.json', { type: "list" });
+    var all_images = cl.imageTag(this.state.userImagesTag + '.json', { type: "list" });
     axios.get(all_images.attributes().src)
       .then(response => {
         this.setState({ images: response.data.resources });
@@ -80,7 +82,7 @@ class GalleryLayout extends Component {
 
   uploadWidget() {
     let _this = this;
-    ccc.openUploadWidget({ cloud_name: 'instaleesh', upload_preset: 'ggdwq1ap', tags: ['test'] },
+    ccc.openUploadWidget({ cloud_name: 'instaleesh', upload_preset: 'ggdwq1ap', tags: [this.state.userImagesTag] },
       function (error, result) {
         if (!error)
           _this.setState({ images: result.concat(_this.state.images) })
