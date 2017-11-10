@@ -8,6 +8,7 @@ import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
 import ReactTooltip from 'react-tooltip';
 import { CardText } from 'material-ui/Card';
+import Linkify from 'react-linkify';
 
 class CommentInput extends Component {
   constructor(props) {
@@ -75,7 +76,7 @@ class SinglePhotoComments extends Component {
     return (
       <CardText style={{ paddingTop: '0px' }}>
       {this.state.photoComments.map(comment => (
-        <Paper key={comment.id} style={{ margin: '5px', padding: '5px' }} zDepth={5} >
+        <Paper key={comment.id} style={{ margin: '5px', padding: '5px', overflowWrap: 'break-word' }} zDepth={5} >
           <Avatar
             data-tip={comment.userData ? comment.userData.displayName : ''}
             src={comment.userData ? comment.userData.photoURL : ''}
@@ -83,7 +84,9 @@ class SinglePhotoComments extends Component {
             style={{ margin: '5px' }}
           />
           <ReactTooltip data-effect="float" />
-          {comment.content}
+          <Linkify>
+            {comment.content}
+          </Linkify>
         </Paper>
       ))}
     </CardText>
