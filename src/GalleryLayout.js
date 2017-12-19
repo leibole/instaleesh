@@ -29,8 +29,10 @@ class GalleryLayout extends ReactQueryParams {
     this.state = {
       images: [],
       singleView: false,
-      userImagesTag: this.queryParams.name ? this.queryParams.name : 'test'
+      userImagesTag: this.queryParams.name ? this.queryParams.name : 'test',
+      subject: ''
     };
+    this.changeSubject = this.changeSubject.bind(this);
     this.backFromSingle = this.backFromSingle.bind(this);
   }
 
@@ -38,7 +40,7 @@ class GalleryLayout extends ReactQueryParams {
     return (
       <div>
         <Headroom>
-          <TopBar backCallback={this.backFromSingle} singleView={this.state.singleView} />
+          <TopBar backCallback={this.backFromSingle} singleView={this.state.singleView} changeSubject={this.changeSubject} />
         </Headroom>
         <div>
           <FloatingActionButton style={uploadButtonStyle} onClick={this.uploadWidget.bind(this)} >
@@ -65,15 +67,35 @@ class GalleryLayout extends ReactQueryParams {
 
   componentDidMount() {
     var cl = new cloudinary.Cloudinary({ cloud_name: "instaleesh", secure: true });
-    var all_images = cl.imageTag(this.state.userImagesTag + '.json', { type: "list" });
+    var all_images = cl.imageTag(
+      this.state.userImagesTag + this.state.subject + '.json', { type: "list" }
+    );
     axios.get(all_images.attributes().src)
       .then(response => {
         this.setState({ images: response.data.resources });
       });
   }
+  
+    componentDidUpdate(prevProps, prevState) {
+      if (prevState.subject === this.state.subject) return;
+      var cl = new cloudinary.Cloudinary({ cloud_name: "instaleesh", secure: true });
+      var all_images = cl.imageTag(
+        this.state.userImagesTag + this.state.subject + '.json', { type: "list" }
+      );
+      axios.get(all_images.attributes().src)
+        .then(response => {
+          this.setState({ images: response.data.resources });
+        }, error => {
+          this.setState({ images: [] });
+        });
+    }
 
   backFromSingle() {
     this.setState({ singleView: false });
+  }
+  
+  changeSubject(newSubject) {
+    this.setState({ subject: newSubject });
   }
 
   changeToSingleView() {
@@ -82,7 +104,7 @@ class GalleryLayout extends ReactQueryParams {
 
   uploadWidget() {
     let _this = this;
-    ccc.openUploadWidget({ cloud_name: 'instaleesh', upload_preset: 'ggdwq1ap', tags: [this.state.userImagesTag] },
+    ccc.openUploadWidget({ cloud_name: 'instaleesh', upload_preset: 'ggdwq1ap', tags: [this.state.userImagesTag + this.state.subject] },
       function (error, result) {
         if (!error)
           _this.setState({ images: result.concat(_this.state.images) })
