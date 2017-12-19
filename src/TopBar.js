@@ -51,9 +51,9 @@ class TopBar extends Component {
               <MenuItem value="" primaryText="General" />
               <MenuItem value="kitchen" primaryText="Kitchen" />
               <MenuItem value="livingroom" primaryText="Living Room" />
-              <MenuItem value="bedroom" primaryText="Bed Room" />
+              <MenuItem value="bedroom" primaryText="Bedroom" />
               <MenuItem value="children" primaryText="Chidren's Room" />
-              <MenuItem value="bath" primaryText="Bath" />
+              <MenuItem value="bathroom" primaryText="Bathroom" />
             </IconMenu>
           </div>
         }
