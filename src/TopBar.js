@@ -48,7 +48,7 @@ class TopBar extends Component {
               onChange={this.handleChangeIssue}
               value={this.state.subject}
             >
-              <MenuItem value="" primaryText="General" />
+              <MenuItem value="" primaryText="Home" />
               <MenuItem value="kitchen" primaryText="Kitchen" />
               <MenuItem value="livingroom" primaryText="Living Room" />
               <MenuItem value="bedroom" primaryText="Bedroom" />
