@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { auth, googleProvider, facebookProvider } from './firebase.js';
-import TopBar from './TopBar';
-import Avatar from 'material-ui/Avatar';
-import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import Paper from 'material-ui/Paper';
-import { Col } from 'react-bootstrap';
+import React, { Component } from "react";
+import { auth, googleProvider, facebookProvider } from "./firebase.js";
+import TopBar from "./TopBar";
+import Avatar from "material-ui/Avatar";
+import { List, ListItem } from "material-ui/List";
+import Subheader from "material-ui/Subheader";
+import CommunicationChatBubble from "material-ui/svg-icons/communication/chat-bubble";
+import Paper from "material-ui/Paper";
+import { Col } from "react-bootstrap";
 
 class Login extends Component {
   constructor(props) {
@@ -23,10 +23,10 @@ class Login extends Component {
     return (
       <div>
         <TopBar />
-        <List style={{ marginTop: '60px' }}>
+        <List style={{ marginTop: "60px" }}>
           <Subheader>Sign in with one of these</Subheader>
           <Col md={6} mdOffset={3}>
-            <Paper style={{ margin: '10px' }}>
+            <Paper style={{ margin: "10px" }}>
               <ListItem
                 primaryText="Sign in with Facebook"
                 leftAvatar={<Avatar src="images/facebook-login.png" />}
@@ -36,7 +36,7 @@ class Login extends Component {
             </Paper>
           </Col>
           <Col md={6} mdOffset={3}>
-            <Paper style={{ margin: '10px' }}>
+            <Paper style={{ margin: "10px" }}>
               <ListItem
                 primaryText="Sign in with Google"
                 leftAvatar={<Avatar src="images/google_logo.jpg" />}
@@ -47,13 +47,17 @@ class Login extends Component {
           </Col>
         </List>
       </div>
-    )
+    );
   }
 
   componentWillMount() {
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(user => {
       if (user) {
         this.props.setUser(user);
+        window.FS.identify(user.uid, {
+          displayName: user.displayName,
+          email: user.email
+        });
       }
     });
   }
@@ -67,11 +71,10 @@ class Login extends Component {
   }
 
   login(provider) {
-    auth.signInWithPopup(provider)
-      .then((result) => {
-        const user = result.user;
-        this.props.setUser(user);
-      });
+    auth.signInWithPopup(provider).then(result => {
+      const user = result.user;
+      this.props.setUser(user);
+    });
   }
 }
 
