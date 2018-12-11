@@ -3,20 +3,19 @@ import { AppBar } from "material-ui";
 import NavigationArrowBack from "material-ui/svg-icons/navigation/arrow-back";
 import IconButton from "material-ui/IconButton";
 import { Image } from "cloudinary-react";
-import IconMenu from "material-ui/IconMenu";
-import MenuItem from "material-ui/MenuItem";
-import Menu from "material-ui/svg-icons/navigation/menu";
 import { connect } from "react-redux";
+import firebase from "./firebase";
+import BoardsMenu from "./Boards/BoardsMenu";
 
 class TopBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       images: [],
+      boards: {},
       singleView: false,
       subject: ""
     };
-    this.handleChangeIssue = this.handleChangeIssue.bind(this);
   }
 
   render() {
@@ -38,37 +37,10 @@ class TopBar extends Component {
             >
               <NavigationArrowBack />
             </IconButton>
-            <IconMenu
-              iconButtonElement={
-                <IconButton
-                  style={{ width: 70, height: 70, color: "black" }}
-                  iconStyle={{
-                    width: 70,
-                    height: 70,
-                    padding: 14,
-                    color: "black"
-                  }}
-                >
-                  <Menu style={{ fill: "black" }} />
-                </IconButton>
-              }
-              targetOrigin={{ horizontal: "right", vertical: "top" }}
-              anchorOrigin={{ horizontal: "right", vertical: "top" }}
-              onChange={this.handleChangeIssue}
-              value={this.props.board}
-            >
-              <MenuItem value="home" primaryText="Home" />
-              <MenuItem value="kitchen" primaryText="Kitchen" />
-              <MenuItem value="plans" primaryText="Plans" />
-              <MenuItem value="models" primaryText="3D models" />
-              <MenuItem value="livingroom" primaryText="Living Room" />
-              <MenuItem value="bedroom" primaryText="Bedroom" />
-              <MenuItem value="children" primaryText="Chidren's Room" />
-              <MenuItem value="bathroom" primaryText="Bathroom" />
-              <MenuItem value="dining" primaryText="Dining" />
-              <MenuItem value="office" primaryText="Office" />
-              <MenuItem value="inspiration" primaryText="My Inspiration" />
-            </IconMenu>
+            <BoardsMenu
+              client={this.props.client}
+              designer={this.props.designer}
+            />
           </div>
         }
         style={{
@@ -84,10 +56,6 @@ class TopBar extends Component {
       </AppBar>
     );
   }
-
-  handleChangeIssue = (event, value) => {
-    this.props.dispatch({ type: "CHANGED_BOARD", board: value });
-  };
 }
 
 const mapStateToProps = state => {

@@ -42,6 +42,8 @@ class GalleryLayout extends ReactQueryParams {
           <TopBar
             backCallback={this.backFromSingle}
             singleView={this.state.singleView}
+            designer={this.props.match.params.designer}
+            client={this.props.match.params.client}
           />
         </Headroom>
         <div>
