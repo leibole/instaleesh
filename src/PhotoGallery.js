@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Masonry from "react-masonry-component";
 import SinglePhoto from "./SinglePhoto";
-import firebase from "./firebase";
 
 const masonryOptions = {
   transitionDuration: 0

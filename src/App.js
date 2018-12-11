@@ -8,7 +8,6 @@ import Login from "./Login";
 import { auth } from "./firebase";
 import { connect } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import TestRouter from "./TestRouter";
 
 class App extends Component {
   constructor() {

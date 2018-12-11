@@ -5,11 +5,7 @@ import IconButton from "material-ui/IconButton";
 import { Image } from "cloudinary-react";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
-import FlatButton from "material-ui/FlatButton";
-import Toggle from "material-ui/Toggle";
-import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import Menu from "material-ui/svg-icons/navigation/menu";
-import NavigationClose from "material-ui/svg-icons/navigation/close";
 import { connect } from "react-redux";
 
 class TopBar extends Component {

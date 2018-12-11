@@ -1,8 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { Divider, FloatingActionButton } from "material-ui";
 import ContentAdd from "material-ui/svg-icons/content/add";
-import cloudinary from "cloudinary-core";
-import axios from "axios";
 import PhotoGallery from "./PhotoGallery";
 import TopBar from "./TopBar";
 import Headroom from "react-headroom";
