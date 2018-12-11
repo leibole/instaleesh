@@ -46,7 +46,7 @@ const focusUsernameInputField = input => {
   if (input) {
     setTimeout(() => {
       input.focus();
-    }, 300);
+    }, 100);
   }
 };
 
