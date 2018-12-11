@@ -1,23 +1,25 @@
-import React, { Component } from 'react';
-import { Divider, FloatingActionButton } from 'material-ui';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import cloudinary from 'cloudinary-core';
-import axios from 'axios';
-import PhotoGallery from './PhotoGallery';
-import TopBar from './TopBar';
-import Headroom from 'react-headroom';
-import ActionExitToApp from 'material-ui/svg-icons/action/exit-to-app';
-import IconButton from 'material-ui/IconButton';
-import ReactTooltip from 'react-tooltip';
-import ReactQueryParams from 'react-query-params';
+import React, { Component } from "react";
+import { Divider, FloatingActionButton } from "material-ui";
+import ContentAdd from "material-ui/svg-icons/content/add";
+import cloudinary from "cloudinary-core";
+import axios from "axios";
+import PhotoGallery from "./PhotoGallery";
+import TopBar from "./TopBar";
+import Headroom from "react-headroom";
+import ActionExitToApp from "material-ui/svg-icons/action/exit-to-app";
+import IconButton from "material-ui/IconButton";
+import ReactTooltip from "react-tooltip";
+import ReactQueryParams from "react-query-params";
+import { connect } from "react-redux";
+import firebase, { auth } from "./firebase";
 
 const uploadButtonStyle = {
   margin: 0,
-  top: 'auto',
+  top: "auto",
   right: 20,
   bottom: 20,
-  left: 'auto',
-  position: 'fixed',
+  left: "auto",
+  position: "fixed",
   zIndex: 2
 };
 
@@ -27,12 +29,11 @@ class GalleryLayout extends ReactQueryParams {
   constructor(props) {
     super(props);
     this.state = {
-      images: [],
+      images: {},
       singleView: false,
-      userImagesTag: this.queryParams.name ? this.queryParams.name : 'test',
-      subject: ''
+      userImagesTag: this.queryParams.name ? this.queryParams.name : "test",
+      subject: ""
     };
-    this.changeSubject = this.changeSubject.bind(this);
     this.backFromSingle = this.backFromSingle.bind(this);
   }
 
@@ -40,10 +41,16 @@ class GalleryLayout extends ReactQueryParams {
     return (
       <div>
         <Headroom>
-          <TopBar backCallback={this.backFromSingle} singleView={this.state.singleView} changeSubject={this.changeSubject} />
+          <TopBar
+            backCallback={this.backFromSingle}
+            singleView={this.state.singleView}
+          />
         </Headroom>
         <div>
-          <FloatingActionButton style={uploadButtonStyle} onClick={this.uploadWidget.bind(this)} >
+          <FloatingActionButton
+            style={uploadButtonStyle}
+            onClick={this.uploadWidget.bind(this)}
+          >
             <ContentAdd />
           </FloatingActionButton>
           <Divider />
@@ -51,51 +58,49 @@ class GalleryLayout extends ReactQueryParams {
             images={this.state.images}
             singleView={this.state.singleView}
             onImageClick={this.changeToSingleView.bind(this)}
-            user={this.props.user} />
+            user={this.props.user}
+          />
         </div>
         <IconButton
-          onClick={this.props.logoutCallback}
+          onClick={this.logout}
           style={{ width: 70, height: 70 }}
-          iconStyle={{ width: 70, height: 70, padding: 14, color: 'black' }}>
+          iconStyle={{ width: 70, height: 70, padding: 14, color: "black" }}
+        >
           <ActionExitToApp data-tip="Logout" />
           <ReactTooltip data-effect="float" />
         </IconButton>
-
       </div>
-    )
+    );
   }
+
+  logout = () => {
+    auth.signOut().then(() => {
+      this.props.dispatch({ type: "USER_SIGN_OUT" });
+    });
+  };
 
   componentDidMount() {
-    var cl = new cloudinary.Cloudinary({ cloud_name: "instaleesh", secure: true });
-    var all_images = cl.imageTag(
-      this.state.userImagesTag + this.state.subject + '.json', { type: "list" }
-    );
-    axios.get(all_images.attributes().src)
-      .then(response => {
-        this.setState({ images: response.data.resources });
-      });
+    var imagesRef = firebase.database().ref(this.getImagesRef());
+
+    imagesRef.on("value", snapshot => {
+      this.setState({ images: snapshot.val() || [] });
+    });
+    this.setState({ imagesRef });
   }
-  
-    componentDidUpdate(prevProps, prevState) {
-      if (prevState.subject === this.state.subject) return;
-      var cl = new cloudinary.Cloudinary({ cloud_name: "instaleesh", secure: true });
-      var all_images = cl.imageTag(
-        this.state.userImagesTag + this.state.subject + '.json', { type: "list" }
-      );
-      axios.get(all_images.attributes().src)
-        .then(response => {
-          this.setState({ images: response.data.resources });
-        }, error => {
-          this.setState({ images: [] });
-        });
-    }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.board === this.props.board) return;
+    this.state.imagesRef.off();
+
+    var imagesRef = firebase.database().ref(this.getImagesRef());
+    imagesRef.on("value", snapshot => {
+      this.setState({ images: snapshot.val() || [] });
+    });
+    this.setState({ imagesRef });
+  }
 
   backFromSingle() {
     this.setState({ singleView: false });
-  }
-  
-  changeSubject(newSubject) {
-    this.setState({ subject: newSubject });
   }
 
   changeToSingleView() {
@@ -104,12 +109,50 @@ class GalleryLayout extends ReactQueryParams {
 
   uploadWidget() {
     let _this = this;
-    ccc.openUploadWidget({ cloud_name: 'instaleesh', upload_preset: 'ggdwq1ap', tags: [this.state.userImagesTag + this.state.subject] },
-      function (error, result) {
-        if (!error)
-          _this.setState({ images: result.concat(_this.state.images) })
-      });
+    ccc.openUploadWidget(
+      {
+        cloud_name: "instaleesh",
+        upload_preset: "ggdwq1ap",
+        tags: [this.state.userImagesTag + this.state.subject]
+      },
+      function(error, results) {
+        if (!error) {
+          // _this.setState({ images: results.concat(_this.state.images) });
+          results.forEach(result => _this.addImage(result.public_id));
+        }
+      }
+    );
   }
+
+  addImage = imageId => {
+    var imagesRef = firebase.database().ref(this.getImagesRef());
+    return imagesRef
+      .push({ public_id: imageId, userData: this.props.user.providerData[0] })
+      .then(ok => console.log(ok), error => console.error(error));
+  };
+
+  getImagesRef = () => {
+    const designer = this.props.match.params.designer;
+    const client = this.props.match.params.client;
+
+    return (
+      "/designers/" +
+      designer +
+      "/clients/" +
+      client +
+      "/boards/" +
+      this.props.board +
+      "/images"
+    );
+  };
 }
 
-export default GalleryLayout;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    user_loaded: state.user_loaded,
+    board: state.board
+  };
+};
+
+export default connect(mapStateToProps)(GalleryLayout);

@@ -10,6 +10,7 @@ import Toggle from "material-ui/Toggle";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import Menu from "material-ui/svg-icons/navigation/menu";
 import NavigationClose from "material-ui/svg-icons/navigation/close";
+import { connect } from "react-redux";
 
 class TopBar extends Component {
   constructor(props) {
@@ -41,41 +42,37 @@ class TopBar extends Component {
             >
               <NavigationArrowBack />
             </IconButton>
-            {this.props.changeSubject ? (
-              <IconMenu
-                iconButtonElement={
-                  <IconButton
-                    style={{ width: 70, height: 70, color: "black" }}
-                    iconStyle={{
-                      width: 70,
-                      height: 70,
-                      padding: 14,
-                      color: "black"
-                    }}
-                  >
-                    <Menu style={{ fill: "black" }} />
-                  </IconButton>
-                }
-                targetOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "top" }}
-                onChange={this.handleChangeIssue}
-                value={this.state.subject}
-              >
-                <MenuItem value="" primaryText="Home" />
-                <MenuItem value="kitchen" primaryText="Kitchen" />
-                <MenuItem value="plans" primaryText="Plans" />
-                <MenuItem value="models" primaryText="3D models" />
-                <MenuItem value="livingroom" primaryText="Living Room" />
-                <MenuItem value="bedroom" primaryText="Bedroom" />
-                <MenuItem value="children" primaryText="Chidren's Room" />
-                <MenuItem value="bathroom" primaryText="Bathroom" />
-                <MenuItem value="dining" primaryText="Dining" />
-                <MenuItem value="office" primaryText="Office" />
-                <MenuItem value="inspiration" primaryText="My Inspiration" />
-              </IconMenu>
-            ) : (
-              ""
-            )}
+            <IconMenu
+              iconButtonElement={
+                <IconButton
+                  style={{ width: 70, height: 70, color: "black" }}
+                  iconStyle={{
+                    width: 70,
+                    height: 70,
+                    padding: 14,
+                    color: "black"
+                  }}
+                >
+                  <Menu style={{ fill: "black" }} />
+                </IconButton>
+              }
+              targetOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "top" }}
+              onChange={this.handleChangeIssue}
+              value={this.props.board}
+            >
+              <MenuItem value="home" primaryText="Home" />
+              <MenuItem value="kitchen" primaryText="Kitchen" />
+              <MenuItem value="plans" primaryText="Plans" />
+              <MenuItem value="models" primaryText="3D models" />
+              <MenuItem value="livingroom" primaryText="Living Room" />
+              <MenuItem value="bedroom" primaryText="Bedroom" />
+              <MenuItem value="children" primaryText="Chidren's Room" />
+              <MenuItem value="bathroom" primaryText="Bathroom" />
+              <MenuItem value="dining" primaryText="Dining" />
+              <MenuItem value="office" primaryText="Office" />
+              <MenuItem value="inspiration" primaryText="My Inspiration" />
+            </IconMenu>
           </div>
         }
         style={{
@@ -93,9 +90,16 @@ class TopBar extends Component {
   }
 
   handleChangeIssue = (event, value) => {
-    this.props.changeSubject(value);
-    this.setState({ subject: value });
+    this.props.dispatch({ type: "CHANGED_BOARD", board: value });
   };
 }
 
-export default TopBar;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    user_loaded: state.user_loaded,
+    board: state.board
+  };
+};
+
+export default connect(mapStateToProps)(TopBar);
