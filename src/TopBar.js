@@ -4,7 +4,6 @@ import NavigationArrowBack from "material-ui/svg-icons/navigation/arrow-back";
 import IconButton from "material-ui/IconButton";
 import { Image } from "cloudinary-react";
 import { connect } from "react-redux";
-import firebase from "./firebase";
 import BoardsMenu from "./Boards/BoardsMenu";
 
 class TopBar extends Component {

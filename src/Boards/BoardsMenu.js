@@ -1,6 +1,6 @@
 import React from "react";
 import IconMenu from "material-ui/IconMenu";
-import Delete from "material-ui/svg-icons/action/delete";
+// import Delete from "material-ui/svg-icons/action/delete";
 import MenuItem from "material-ui/MenuItem";
 import Menu from "material-ui/svg-icons/navigation/menu";
 import IconButton from "material-ui/IconButton";
@@ -65,12 +65,14 @@ class BoardsMenu extends React.Component {
   }
 
   componentDidMount() {
-    var boardsRef = firebase.database().ref(this.getBoardsRef());
+    if (this.props.designer) {
+      var boardsRef = firebase.database().ref(this.getBoardsRef());
 
-    boardsRef.on("value", snapshot => {
-      this.setState({ boards: snapshot.val() || [] });
-    });
-    this.setState({ boardsRef });
+      boardsRef.on("value", snapshot => {
+        this.setState({ boards: snapshot.val() || [] });
+      });
+      this.setState({ boardsRef });
+    }
   }
 
   removeBoard = boardName => {
@@ -85,10 +87,16 @@ class BoardsMenu extends React.Component {
     if (currentNames.indexOf(keyForName) < 0) {
       var boardsRef = firebase.database().ref(this.getBoardsRef() + keyForName);
 
-      boardsRef.set({ label: name }).then(() => {
-        this.closeNewBoard();
-        this.props.dispatch({ type: "CHANGED_BOARD", board: keyForName });
-      });
+      boardsRef.set({ label: name }).then(
+        () => {
+          this.closeNewBoard();
+          this.props.dispatch({ type: "CHANGED_BOARD", board: keyForName });
+        },
+        error => {
+          console.log("error adding board");
+          console.error(error);
+        }
+      );
     } else {
       this.closeNewBoard();
       this.props.dispatch({ type: "CHANGED_BOARD", board: keyForName });

@@ -8,6 +8,7 @@ import Login from "./Login";
 import { auth } from "./firebase";
 import { connect } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import DesignerHome from "./Designer/DesignerHome";
 
 class App extends Component {
   constructor() {
@@ -25,6 +26,7 @@ class App extends Component {
           {this.props.user ? (
             <React.Fragment>
               <Route exact path="/" component={GalleryLayout} />
+              <Route exact path="/:designer" component={DesignerHome} />
               <Route
                 exact
                 path="/:designer/:client"
