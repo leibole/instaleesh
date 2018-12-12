@@ -56,12 +56,12 @@ class CustomerList extends React.Component {
 
   addNewCustomer = name => {
     if (!name) return;
-    var keyForName = name.replace(/ /g, "_");
+    var keyForName = name.replace(/ /g, "_").toLowerCase();
     var currentNames = Object.keys(this.props.clients);
     if (currentNames.indexOf(keyForName) < 0) {
       var boardsRef = firebase
         .database()
-        .ref("/designers/" + this.props.designer + "/clients/" + keyForName);
+        .ref(baseCustomersRef(this.props.designer, keyForName));
 
       boardsRef.set({ name: name, boards: defaultBoards }).then(
         () => {
@@ -76,13 +76,7 @@ class CustomerList extends React.Component {
       if (this.props.clients[keyForName].disabled) {
         var boardsRef = firebase
           .database()
-          .ref(
-            "/designers/" +
-              this.props.designer +
-              "/clients/" +
-              keyForName +
-              "/disabled"
-          );
+          .ref(baseCustomersRef(this.props.designer, keyForName) + "/disabled");
         boardsRef.set(false).then(
           () => {
             this.closeNewCustomer();
@@ -104,20 +98,17 @@ class CustomerList extends React.Component {
 
     var boardsRef = firebase
       .database()
-      .ref(
-        "/designers/" +
-          this.props.designer +
-          "/clients/" +
-          keyForName +
-          "/disabled"
-      );
+      .ref(baseCustomersRef(this.props.designer, keyForName) + "/disabled");
 
-    boardsRef.set({ disabled: true });
+    boardsRef.set(true);
   };
 }
 
 export default CustomerList;
 
+const baseCustomersRef = (designer, clientKey) => {
+  return "/designers/" + designer + "/clients/" + clientKey;
+};
 const defaultBoards = {
   livingroom: { label: "Living Room" },
   Bathroom: { label: "Bathroom" },

@@ -82,7 +82,7 @@ class BoardsMenu extends React.Component {
 
   addNewBoard = name => {
     if (!name) return;
-    var keyForName = name.replace(/ /g, "_");
+    var keyForName = name.replace(/ /g, "_").toLowerCase();
     var currentNames = Object.keys(this.state.boards);
     if (currentNames.indexOf(keyForName) < 0) {
       var boardsRef = firebase.database().ref(this.getBoardsRef() + keyForName);
