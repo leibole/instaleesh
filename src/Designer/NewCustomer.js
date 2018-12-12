@@ -27,7 +27,6 @@ class NewCustomer extends React.Component {
           type="text"
           value={this.state.customerName}
           onChange={this.handleNameChange}
-          ref={focusUsernameInputField}
         />
       </Dialog>
     );
@@ -41,13 +40,5 @@ class NewCustomer extends React.Component {
     this.props.addNewCustomer(this.state.customerName);
   };
 }
-
-const focusUsernameInputField = input => {
-  if (input) {
-    setTimeout(() => {
-      input.focus();
-    }, 100);
-  }
-};
 
 export default NewCustomer;

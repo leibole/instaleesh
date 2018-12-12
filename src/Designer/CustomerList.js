@@ -12,19 +12,23 @@ class CustomerList extends React.Component {
       <React.Fragment>
         {Object.keys(this.props.clients).map(clientKey => {
           return (
-            <Link
-              key={clientKey}
-              to={"/" + this.props.designer + "/" + clientKey}
-            >
-              <Paper style={{ padding: "10px", margin: "10px" }}>
-                <h4 style={{ display: "inline" }}>
-                  {this.props.clients[clientKey].name}
-                </h4>
-                <span style={{ float: "right" }}>
-                  <Delete />
-                </span>
-              </Paper>
-            </Link>
+            !this.props.clients[clientKey].disabled && (
+              <Link
+                key={clientKey}
+                to={"/" + this.props.designer + "/" + clientKey}
+              >
+                <Paper style={{ padding: "10px", margin: "10px" }}>
+                  <h4 style={{ display: "inline" }}>
+                    {this.props.clients[clientKey].name}
+                  </h4>
+                  <span style={{ float: "right" }}>
+                    <Delete
+                      onClick={this.removeCustomer.bind(this, clientKey)}
+                    />
+                  </span>
+                </Paper>
+              </Link>
+            )
           );
         })}
         <Paper
@@ -69,8 +73,46 @@ class CustomerList extends React.Component {
         }
       );
     } else {
-      this.closeNewCustomer();
+      if (this.props.clients[keyForName].disabled) {
+        var boardsRef = firebase
+          .database()
+          .ref(
+            "/designers/" +
+              this.props.designer +
+              "/clients/" +
+              keyForName +
+              "/disabled"
+          );
+        boardsRef.set(false).then(
+          () => {
+            this.closeNewCustomer();
+          },
+          error => {
+            console.log("error adding customer");
+            console.error(error);
+          }
+        );
+      } else {
+        this.closeNewCustomer();
+      }
     }
+  };
+
+  removeCustomer = (keyForName, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    var boardsRef = firebase
+      .database()
+      .ref(
+        "/designers/" +
+          this.props.designer +
+          "/clients/" +
+          keyForName +
+          "/disabled"
+      );
+
+    boardsRef.set({ disabled: true });
   };
 }
 
