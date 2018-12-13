@@ -2,7 +2,7 @@ import React from "react";
 import Dialog from "material-ui/Dialog";
 import Delete from "material-ui/svg-icons/action/delete";
 import FlatButton from "material-ui/FlatButton";
-import firebase from "./firebase";
+import firebase from "../firebase";
 import { connect } from "react-redux";
 
 class DeletePhoto extends React.Component {
@@ -14,8 +14,24 @@ class DeletePhoto extends React.Component {
     ];
 
     return (
-      <span style={{ float: "right" }}>
-        <Delete onClick={this.openDialog} style={{ cursor: "pointer" }} />
+      <span
+        style={{
+          zIndex: "1000",
+          position: "relative",
+          color: "black",
+          top: "6px",
+          left: "15px"
+        }}
+      >
+        <Delete
+          onClick={this.openDialog}
+          style={{
+            cursor: "pointer",
+            backgroundColor: "white",
+            color: "black",
+            opacity: 0.3
+          }}
+        />
         <Dialog
           title="Really delete this image?"
           actions={actions}

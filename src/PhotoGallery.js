@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Masonry from "react-masonry-component";
-import SinglePhoto from "./SinglePhoto";
+import SinglePhoto from "./SinglePhoto/SinglePhoto";
 
 const masonryOptions = {
   transitionDuration: 0

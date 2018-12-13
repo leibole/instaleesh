@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import FileDownload from "material-ui/svg-icons/file/file-download";
 import "./SinglePhoto.css";
 import DeletePhoto from "./DeletePhoto";
-import { isMobile } from "react-device-detect";
+import PhotoDetails from "./PhotoDetails";
 
 class SinglePhoto extends Component {
   constructor(props) {
@@ -34,27 +34,32 @@ class SinglePhoto extends Component {
         xsOffset={this.props.singleView ? 1 : 0}
         className="mobile-padding"
       >
+        <PhotoDetails
+          name={this.props.image.userData.displayName}
+          date={new Date(this.props.image.timestamp).toLocaleDateString()}
+          imageId={
+            this.props.user.providerData[0].uid ===
+              this.props.image.userData.uid && this.props.image.id
+          }
+        />
+        {/* {!(isMobile && !this.props.singleView) && (
+          <CardHeader
+            title={this.props.image.userData.displayName}
+            subtitle={new Date(this.props.image.timestamp).toLocaleDateString()}
+            avatar={this.props.image.userData.photoURL}
+          >
+            {this.props.user.providerData[0].uid ===
+              this.props.image.userData.uid && (
+              <DeletePhoto imageId={this.props.image.id} />
+            )}
+          </CardHeader>
+        )} */}
         <Card
           ref={cardRef => {
             this.cardRef = cardRef;
           }}
           style={{ border: isNewToUser ? "4px solid rgb(0, 151, 167)" : "" }}
         >
-          {!(isMobile && !this.props.singleView) && (
-            <CardHeader
-              title={this.props.image.userData.displayName}
-              subtitle={new Date(
-                this.props.image.timestamp
-              ).toLocaleDateString()}
-              avatar={this.props.image.userData.photoURL}
-            >
-              {this.props.user.providerData[0].uid ===
-                this.props.image.userData.uid && (
-                <DeletePhoto imageId={this.props.image.id} />
-              )}
-            </CardHeader>
-          )}
-
           <CardMedia style={{ cursor: this.props.singleView ? "" : "pointer" }}>
             <a
               href={

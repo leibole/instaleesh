@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import TextField from "material-ui/TextField";
 import IconButton from "material-ui/IconButton";
 import ContentSend from "material-ui/svg-icons/content/send";
-import firebase from "./firebase";
+import firebase from "../firebase";
 import Paper from "material-ui/Paper";
 import Avatar from "material-ui/Avatar";
 import ReactTooltip from "react-tooltip";
