@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import FileDownload from "material-ui/svg-icons/file/file-download";
 import "./SinglePhoto.css";
 import DeletePhoto from "./DeletePhoto";
+import { isMobile } from "react-device-detect";
 
 class SinglePhoto extends Component {
   constructor(props) {
@@ -39,16 +40,21 @@ class SinglePhoto extends Component {
           }}
           style={{ border: isNewToUser ? "4px solid rgb(0, 151, 167)" : "" }}
         >
-          <CardHeader
-            title={this.props.image.userData.displayName}
-            subtitle={new Date(this.props.image.timestamp).toLocaleDateString()}
-            avatar={this.props.image.userData.photoURL}
-          >
-            {this.props.user.providerData[0].uid ===
-              this.props.image.userData.uid && (
-              <DeletePhoto imageId={this.props.image.id} />
-            )}
-          </CardHeader>
+          {!(isMobile && !this.props.singleView) && (
+            <CardHeader
+              title={this.props.image.userData.displayName}
+              subtitle={new Date(
+                this.props.image.timestamp
+              ).toLocaleDateString()}
+              avatar={this.props.image.userData.photoURL}
+            >
+              {this.props.user.providerData[0].uid ===
+                this.props.image.userData.uid && (
+                <DeletePhoto imageId={this.props.image.id} />
+              )}
+            </CardHeader>
+          )}
+
           <CardMedia style={{ cursor: this.props.singleView ? "" : "pointer" }}>
             <a
               href={

@@ -13,6 +13,7 @@
     "material-ui": "^0.19.4",
     "react": "^16.6.3",
     "react-bootstrap": "^0.31.2",
+    "react-device-detect": "^1.6.1",
     "react-dom": "^16.6.3",
     "react-headroom": "^2.1.6",
     "react-linkify": "^0.2.1",
