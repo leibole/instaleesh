@@ -58,8 +58,9 @@ class CustomerList extends React.Component {
     if (!name) return;
     var keyForName = name.replace(/ /g, "_").toLowerCase();
     var currentNames = Object.keys(this.props.clients);
+    var boardsRef;
     if (currentNames.indexOf(keyForName) < 0) {
-      var boardsRef = firebase
+      boardsRef = firebase
         .database()
         .ref(baseCustomersRef(this.props.designer, keyForName));
 
@@ -74,7 +75,7 @@ class CustomerList extends React.Component {
       );
     } else {
       if (this.props.clients[keyForName].disabled) {
-        var boardsRef = firebase
+        boardsRef = firebase
           .database()
           .ref(baseCustomersRef(this.props.designer, keyForName) + "/disabled");
         boardsRef.set(false).then(
@@ -114,6 +115,5 @@ const defaultBoards = {
   Bathroom: { label: "Bathroom" },
   Kitchen: { label: "Kitchen" },
   "3Dplans": { label: "Childen's Room" },
-  Inspiration: { label: "Inspiration" },
-  Bathroom: { label: "Bathroom" }
+  Inspiration: { label: "Inspiration" }
 };

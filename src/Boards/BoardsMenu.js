@@ -1,6 +1,7 @@
 import React from "react";
 import IconMenu from "material-ui/IconMenu";
 // import Delete from "material-ui/svg-icons/action/delete";
+import NewReleases from "material-ui/svg-icons/av/new-releases";
 import MenuItem from "material-ui/MenuItem";
 import Menu from "material-ui/svg-icons/navigation/menu";
 import IconButton from "material-ui/IconButton";
@@ -36,13 +37,23 @@ class BoardsMenu extends React.Component {
           <MenuItem value="_new_" primaryText="Add New Board">
             <span style={{ float: "right" }}>+</span>
           </MenuItem>
-          {Object.keys(this.state.boards).map(boardName => {
+          {Object.keys(this.props.boards).map(boardName => {
             return (
-              this.state.boards[boardName].label && (
+              this.props.boards[boardName].label && (
                 <MenuItem
                   key={boardName}
                   value={boardName}
-                  primaryText={this.state.boards[boardName].label}
+                  primaryText={
+                    <div>
+                      {this.props.boards[boardName].label}
+                      {!this.hasUserSeenImages(boardName) && (
+                        <NewReleases
+                          style={{ height: "18px", color: "rgb(0, 151, 167)" }}
+                        />
+                      )}
+                    </div>
+                  }
+                  style={{ display: "inline" }}
                 >
                   {/* <span style={{ float: "right" }}>
                     <Delete
@@ -64,17 +75,6 @@ class BoardsMenu extends React.Component {
     );
   }
 
-  componentDidMount() {
-    if (this.props.designer) {
-      var boardsRef = firebase.database().ref(this.getBoardsRef());
-
-      boardsRef.on("value", snapshot => {
-        this.setState({ boards: snapshot.val() || [] });
-      });
-      this.setState({ boardsRef });
-    }
-  }
-
   removeBoard = boardName => {
     var boardsRef = firebase.database().ref(this.getBoardsRef() + boardName);
     boardsRef.remove();
@@ -83,7 +83,7 @@ class BoardsMenu extends React.Component {
   addNewBoard = name => {
     if (!name) return;
     var keyForName = name.replace(/ /g, "_").toLowerCase();
-    var currentNames = Object.keys(this.state.boards);
+    var currentNames = Object.keys(this.props.boards);
     if (currentNames.indexOf(keyForName) < 0) {
       var boardsRef = firebase.database().ref(this.getBoardsRef() + keyForName);
 
@@ -101,6 +101,22 @@ class BoardsMenu extends React.Component {
       this.closeNewBoard();
       this.props.dispatch({ type: "CHANGED_BOARD", board: keyForName });
     }
+  };
+
+  hasUserSeenImages = boardName => {
+    var userLastSeenBoard =
+      (this.props.lastSeen && this.props.lastSeen.boards[boardName]) || 0;
+    var boardLatestImageTime = Math.max(
+      (this.props.boards[boardName].images &&
+        Math.max.apply(
+          null,
+          Object.keys(this.props.boards[boardName].images).map(
+            imageKey => this.props.boards[boardName].images[imageKey].timestamp
+          )
+        )) ||
+        0
+    );
+    return userLastSeenBoard > boardLatestImageTime;
   };
 
   handleChangeBoard = (event, value) => {
@@ -131,7 +147,9 @@ const mapStateToProps = state => {
   return {
     user: state.user,
     user_loaded: state.user_loaded,
-    board: state.board
+    board: state.board,
+    lastSeen: state.lastSeen,
+    boards: state.boards
   };
 };
 

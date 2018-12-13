@@ -133,7 +133,7 @@ class GalleryLayout extends ReactQueryParams {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.board === this.props.board) return;
-    this.setState({ lastSeenUpadted: false });
+    this.updateLastSeen();
   }
 
   dispatchParams = () => {
