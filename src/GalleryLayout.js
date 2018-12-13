@@ -80,6 +80,7 @@ class GalleryLayout extends ReactQueryParams {
   };
 
   componentDidMount() {
+    this.dispatchParams();
     var imagesRef = firebase.database().ref(this.getImagesRef());
 
     imagesRef.on("value", snapshot => {
@@ -98,6 +99,14 @@ class GalleryLayout extends ReactQueryParams {
     });
     this.setState({ imagesRef });
   }
+
+  dispatchParams = () => {
+    this.props.dispatch({
+      type: "GOT_PARAMS",
+      designer: this.props.match.params.designer,
+      client: this.props.match.params.client
+    });
+  };
 
   backFromSingle() {
     this.setState({ singleView: false });

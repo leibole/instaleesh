@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { Col } from "react-bootstrap";
-import { Card, CardMedia, CardTitle } from "material-ui/Card";
+import { Card, CardMedia, CardTitle, CardHeader } from "material-ui/Card";
 import reactDOM from "react-dom";
 import { CommentInput, SinglePhotoComments } from "./Comments";
 import CommunicationChatBubble from "material-ui/svg-icons/communication/chat-bubble";
+import { connect } from "react-redux";
 import FileDownload from "material-ui/svg-icons/file/file-download";
 import "./SinglePhoto.css";
+import DeletePhoto from "./DeletePhoto";
 
 class SinglePhoto extends Component {
   constructor(props) {
@@ -31,6 +33,16 @@ class SinglePhoto extends Component {
             this.cardRef = cardRef;
           }}
         >
+          <CardHeader
+            title={this.props.image.userData.displayName}
+            subtitle={new Date().toLocaleDateString()}
+            avatar={this.props.image.userData.photoURL}
+          >
+            {this.props.user.providerData[0].uid ===
+              this.props.image.userData.uid && (
+              <DeletePhoto imageId={this.props.image.id} />
+            )}
+          </CardHeader>
           <CardMedia style={{ cursor: this.props.singleView ? "" : "pointer" }}>
             <a
               href={
@@ -98,4 +110,12 @@ class SinglePhoto extends Component {
   }
 }
 
-export default SinglePhoto;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    user_loaded: state.user_loaded,
+    board: state.board
+  };
+};
+
+export default connect(mapStateToProps)(SinglePhoto);

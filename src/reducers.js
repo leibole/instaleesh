@@ -26,6 +26,12 @@ const reducers = (state = initalState, action) => {
         ...state,
         user_loaded: true
       };
+    case "GOT_PARAMS":
+      return {
+        ...state,
+        designer: action.designer,
+        client: action.client
+      };
 
     default:
       return state;
