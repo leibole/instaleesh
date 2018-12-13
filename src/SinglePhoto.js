@@ -20,6 +20,11 @@ class SinglePhoto extends Component {
   }
 
   render() {
+    var userLastSeenBoard =
+      (this.props.lastSeen && this.props.lastSeen.boards[this.props.board]) ||
+      999999999999999;
+    var isNewToUser = userLastSeenBoard < this.props.image.timestamp;
+
     return (
       <Col
         lg={this.props.singleView ? 6 : 3}
@@ -32,10 +37,11 @@ class SinglePhoto extends Component {
           ref={cardRef => {
             this.cardRef = cardRef;
           }}
+          style={{ border: isNewToUser ? "4px solid rgb(0, 151, 167)" : "" }}
         >
           <CardHeader
             title={this.props.image.userData.displayName}
-            subtitle={new Date().toLocaleDateString()}
+            subtitle={new Date(this.props.image.timestamp).toLocaleDateString()}
             avatar={this.props.image.userData.photoURL}
           >
             {this.props.user.providerData[0].uid ===
@@ -114,7 +120,9 @@ const mapStateToProps = state => {
   return {
     user: state.user,
     user_loaded: state.user_loaded,
-    board: state.board
+    board: state.board,
+    boards: state.boards,
+    lastSeen: state.lastSeen
   };
 };
 

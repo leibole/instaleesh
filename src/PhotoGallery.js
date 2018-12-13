@@ -54,18 +54,20 @@ class PhotoGallery extends Component {
       image.id = imageKey;
       return image;
     });
-    return imagesToRender.map(
-      image => (
-        <SinglePhoto
-          image={image}
-          key={image.public_id}
-          singleView={singleView}
-          onImageClick={onImageClick}
-          user={this.props.user}
-        />
-      ),
-      this
-    );
+    return imagesToRender
+      .reverse()
+      .map(
+        image => (
+          <SinglePhoto
+            image={image}
+            key={image.public_id}
+            singleView={singleView}
+            onImageClick={onImageClick}
+            user={this.props.user}
+          />
+        ),
+        this
+      );
   }
 }
 

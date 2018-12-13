@@ -30,7 +30,8 @@ class GalleryLayout extends ReactQueryParams {
       images: {},
       singleView: false,
       userImagesTag: this.queryParams.name ? this.queryParams.name : "test",
-      subject: ""
+      subject: "",
+      lastSeenUpadted: false
     };
     this.backFromSingle = this.backFromSingle.bind(this);
   }
@@ -55,7 +56,11 @@ class GalleryLayout extends ReactQueryParams {
           </FloatingActionButton>
           <Divider />
           <PhotoGallery
-            images={this.state.images}
+            images={
+              (this.props.boards[this.props.board] &&
+                this.props.boards[this.props.board].images) ||
+              {}
+            }
             singleView={this.state.singleView}
             onImageClick={this.changeToSingleView.bind(this)}
             user={this.props.user}
@@ -81,23 +86,54 @@ class GalleryLayout extends ReactQueryParams {
 
   componentDidMount() {
     this.dispatchParams();
-    var imagesRef = firebase.database().ref(this.getImagesRef());
-
-    imagesRef.on("value", snapshot => {
-      this.setState({ images: snapshot.val() || [] });
-    });
-    this.setState({ imagesRef });
+    this.getBoards();
+    this.getLastSeen();
   }
+
+  getBoards = () => {
+    const designer = this.props.match.params.designer;
+    const client = this.props.match.params.client;
+
+    var boardsRef = firebase
+      .database()
+      .ref("/designers/" + designer + "/clients/" + client + "/boards");
+
+    boardsRef.on("value", snapshot => {
+      this.props.dispatch({
+        type: "GOT_BOARDS",
+        boards: snapshot.val() || {}
+      });
+    });
+  };
+
+  getLastSeen = () => {
+    const designer = this.props.match.params.designer;
+    const client = this.props.match.params.client;
+
+    var LastSeenRef = firebase
+      .database()
+      .ref(
+        "/designers/" +
+          designer +
+          "/clients/" +
+          client +
+          "/last_seen/" +
+          this.props.user.providerData[0].uid
+      );
+
+    LastSeenRef.once("value")
+      .then(snapshot => {
+        this.props.dispatch({
+          type: "GOT_LAST_SEEN",
+          lastSeen: snapshot.val() || {}
+        });
+      })
+      .then(() => this.updateLastSeen());
+  };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.board === this.props.board) return;
-    this.state.imagesRef.off();
-
-    var imagesRef = firebase.database().ref(this.getImagesRef());
-    imagesRef.on("value", snapshot => {
-      this.setState({ images: snapshot.val() || [] });
-    });
-    this.setState({ imagesRef });
+    this.setState({ lastSeenUpadted: false });
   }
 
   dispatchParams = () => {
@@ -116,6 +152,23 @@ class GalleryLayout extends ReactQueryParams {
     this.setState({ singleView: true });
   }
 
+  updateLastSeen = () => {
+    const designer = this.props.match.params.designer;
+    const client = this.props.match.params.client;
+
+    firebase
+      .database()
+      .ref(
+        getLastSeenRef(
+          designer,
+          client,
+          this.props.board,
+          this.props.user.providerData[0].uid
+        )
+      )
+      .set(new Date().getTime());
+  };
+
   uploadWidget() {
     let _this = this;
     ccc.openUploadWidget(
@@ -126,7 +179,6 @@ class GalleryLayout extends ReactQueryParams {
       },
       function(error, results) {
         if (!error) {
-          // _this.setState({ images: results.concat(_this.state.images) });
           results.forEach(result => _this.addImage(result.public_id));
         }
       }
@@ -136,7 +188,11 @@ class GalleryLayout extends ReactQueryParams {
   addImage = imageId => {
     var imagesRef = firebase.database().ref(this.getImagesRef());
     return imagesRef
-      .push({ public_id: imageId, userData: this.props.user.providerData[0] })
+      .push({
+        public_id: imageId,
+        userData: this.props.user.providerData[0],
+        timestamp: new Date().getTime()
+      })
       .then(ok => console.log(ok), error => console.error(error));
   };
 
@@ -160,8 +216,23 @@ const mapStateToProps = state => {
   return {
     user: state.user,
     user_loaded: state.user_loaded,
-    board: state.board
+    board: state.board,
+    boards: state.boards,
+    lastSeenUpadted: state.lastSeenUpadted
   };
 };
 
 export default connect(mapStateToProps)(GalleryLayout);
+
+const getLastSeenRef = (designer, client, board, userId) => {
+  return (
+    "/designers/" +
+    designer +
+    "/clients/" +
+    client +
+    "/last_seen/" +
+    userId +
+    "/boards/" +
+    board
+  );
+};

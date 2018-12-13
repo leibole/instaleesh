@@ -1,7 +1,11 @@
 const initalState = {
   user: null,
   user_loaded: false,
-  board: "home"
+  board: "home",
+  designer: "",
+  client: "",
+  boards: {},
+  lastSeenUpadted: true
 };
 
 const reducers = (state = initalState, action) => {
@@ -31,6 +35,16 @@ const reducers = (state = initalState, action) => {
         ...state,
         designer: action.designer,
         client: action.client
+      };
+    case "GOT_BOARDS":
+      return {
+        ...state,
+        boards: action.boards
+      };
+    case "GOT_LAST_SEEN":
+      return {
+        ...state,
+        lastSeen: action.lastSeen
       };
 
     default:
