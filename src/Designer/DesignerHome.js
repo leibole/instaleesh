@@ -3,6 +3,7 @@ import Paper from "material-ui/Card";
 import { Col } from "react-bootstrap";
 import firebase from "../firebase";
 import CustomerList from "./CustomerList";
+import DesignerImage from "./DesignerImage";
 
 class DesignerHome extends React.Component {
   state = { clients: {} };
@@ -15,6 +16,10 @@ class DesignerHome extends React.Component {
             designer={this.props.match.params.designer}
             clients={this.state.clients}
           />
+          <br />
+          <br />
+          <h4>View/Edit Your Logo</h4>
+          <DesignerImage designer={this.props.match.params.designer} />
         </Paper>
       </Col>
     );

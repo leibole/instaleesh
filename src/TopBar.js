@@ -5,6 +5,7 @@ import IconButton from "material-ui/IconButton";
 import { Image } from "cloudinary-react";
 import { connect } from "react-redux";
 import BoardsMenu from "./Boards/BoardsMenu";
+import firebase from "./firebase";
 
 class TopBar extends Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class TopBar extends Component {
       images: [],
       boards: {},
       singleView: false,
-      subject: ""
+      subject: "",
+      logoPublicId: ""
     };
   }
 
@@ -49,11 +51,20 @@ class TopBar extends Component {
       >
         <Image
           cloudName={"instaleesh"}
-          publicId={"title_logo_mchxjq"}
+          publicId={this.state.logoPublicId}
           height={100}
         />
       </AppBar>
     );
+  }
+
+  componentDidMount() {
+    firebase
+      .database()
+      .ref("/designers/" + this.props.designer + "/logo")
+      .on("value", snapshot =>
+        this.setState({ logoPublicId: snapshot.val() || "" })
+      );
   }
 }
 
