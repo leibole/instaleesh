@@ -45,7 +45,12 @@ class BoardsMenu extends React.Component {
                   value={boardName}
                   primaryText={
                     <div>
-                      {this.props.boards[boardName].label}
+                      {this.props.boards[boardName].label}(
+                      {(this.props.boards[boardName].images &&
+                        Object.keys(this.props.boards[boardName].images)
+                          .length) ||
+                        0}
+                      )
                       {!this.hasUserSeenImages(boardName) && (
                         <NewReleases
                           style={{ height: "18px", color: "rgb(0, 151, 167)" }}
