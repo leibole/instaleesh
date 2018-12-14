@@ -110,7 +110,10 @@ class BoardsMenu extends React.Component {
 
   hasUserSeenImages = boardName => {
     var userLastSeenBoard =
-      (this.props.lastSeen && this.props.lastSeen.boards[boardName]) || 0;
+      (this.props.lastSeen &&
+        this.props.lastSeen.boards &&
+        this.props.lastSeen.boards[boardName]) ||
+      0;
     var boardLatestImageTime = Math.max(
       (this.props.boards[boardName].images &&
         Math.max.apply(
