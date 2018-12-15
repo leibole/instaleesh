@@ -22,7 +22,9 @@ class SinglePhoto extends Component {
 
   render() {
     var userLastSeenBoard =
-      (this.props.lastSeen && this.props.lastSeen.boards[this.props.board]) ||
+      (this.props.lastSeen &&
+        this.props.lastSeen.boards &&
+        this.props.lastSeen.boards[this.props.board]) ||
       999999999999999;
     var isNewToUser = userLastSeenBoard < this.props.image.timestamp;
 
